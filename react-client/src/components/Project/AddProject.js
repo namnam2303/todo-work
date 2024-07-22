@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-
-export default class AddProject extends Component {
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { createProject } from "../../actions/projectAction";
+class AddProject extends Component {
   constructor() {
     super();
     this.state = {
@@ -11,6 +13,7 @@ export default class AddProject extends Component {
       endDate: "",
     };
   }
+
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -24,8 +27,9 @@ export default class AddProject extends Component {
       startDate: this.state.startDate,
       endDate: this.state.endDate,
     };
-    console.log(newProject);
+    this.props.createProject(newProject, this.props.history);
   };
+
   render() {
     return (
       <div className="register">
@@ -38,7 +42,7 @@ export default class AddProject extends Component {
                 <div className="form-group">
                   <input
                     type="text"
-                    className="form-control form-control-lg "
+                    className="form-control form-control-lg"
                     placeholder="Project Name"
                     name="projectName"
                     value={this.state.projectName}
@@ -55,9 +59,6 @@ export default class AddProject extends Component {
                     onChange={this.onChange}
                   />
                 </div>
-                {
-                  //<!-- disabled for Edit Only!! remove "disabled" for the Create operation -->
-                }
                 <div className="form-group">
                   <textarea
                     className="form-control form-control-lg"
@@ -87,7 +88,6 @@ export default class AddProject extends Component {
                     onChange={this.onChange}
                   />
                 </div>
-
                 <input
                   type="submit"
                   className="btn btn-primary btn-block mt-4"
@@ -100,3 +100,9 @@ export default class AddProject extends Component {
     );
   }
 }
+
+AddProject.propTypes = {
+  createProject: PropTypes.func.isRequired,
+};
+
+export default connect(null, { createProject })(AddProject);
