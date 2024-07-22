@@ -3,6 +3,7 @@ package com.todowork.services;
 import com.todowork.domain.Project;
 import com.todowork.exceptions.ProjectIdException;
 import com.todowork.repository.ProjectRepository;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,25 @@ public class ProjectService {
         } catch (Exception e){
             throw new ProjectIdException("Project ID" + project.getProjectIdentifier().toUpperCase() + " already exists");
         }
+    }
+
+    public Project findProjectByProjectIdentifier(String projectIdentifier) {
+        Project project = projectRepository.findByProjectIdentifier(projectIdentifier.toUpperCase());
+        if (project == null) {
+            throw new ProjectIdException("Project ID" + projectIdentifier.toUpperCase() + " not found");
+        }
+        return project;
+    }
+
+    public Iterable<Project> findAllProjects() {
+        return projectRepository.findAll();
+    }
+
+    public void deleteProjectByProjectIdentifier(String projectIdentifier) {
+        Project project = findProjectByProjectIdentifier(projectIdentifier.toUpperCase());
+        if (project == null) {
+            throw new ProjectIdException("Project ID '" + projectIdentifier.toUpperCase() + "' does not exist");
+        }
+        projectRepository.delete(project);
     }
 }
