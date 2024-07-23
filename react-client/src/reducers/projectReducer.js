@@ -1,9 +1,9 @@
 import {
-  GET_ERRORS,
   GET_PROJECT,
   GET_PROJECTS,
   CREATE_PROJECT,
   DELETE_PROJECT,
+  UPDATE_PROJECT,
 } from "../actions/type";
 const initialState = {
   projects: [],
@@ -23,6 +23,11 @@ export default function (state = initialState, action) {
         project: action.payload,
       };
     case CREATE_PROJECT:
+      return {
+        ...state,
+        projects: [...state.projects, action.payload],
+      };
+    case UPDATE_PROJECT:
       return {
         ...state,
         projects: [...state.projects, action.payload],

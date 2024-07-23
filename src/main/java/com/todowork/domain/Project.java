@@ -3,6 +3,7 @@ package com.todowork.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,16 +24,17 @@ public class Project {
     private Long id;
     @NotBlank(message = "Project name is required")
     private String projectName;
-    @NotBlank(message = "Project identifier is required")
     @Size(min = 4, max = 5, message = "Please use 4 to 5 characters")
     @Column(unique = true, updatable = false)
     private String projectIdentifier;
-    @NotBlank(message = "project description is required")
+    @NotBlank(message = "Project description is required")
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "Start date is required")
     private Date startDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "End date is required")
     private Date endDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd")

@@ -13,7 +13,7 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
-    public Project saveOrUpdate(Project project) {
+    public Project save(Project project) {
         try {
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
             return projectRepository.save(project);
@@ -40,5 +40,18 @@ public class ProjectService {
             throw new ProjectIdException("Project ID '" + projectIdentifier.toUpperCase() + "' does not exist");
         }
         projectRepository.delete(project);
+    }
+
+    public void updateProjectByProjectIdentifier(String projectIdentifier, Project project) {
+        Project projectToUpdate = findProjectByProjectIdentifier(projectIdentifier.toUpperCase());
+        if (projectToUpdate == null) {
+            throw new ProjectIdException("Project ID '" + projectIdentifier.toUpperCase() + "' does not exist");
+        } else {
+            projectToUpdate.setProjectName(project.getProjectName());
+            projectToUpdate.setDescription(project.getDescription());
+            projectToUpdate.setEndDate(project.getEndDate());
+            projectToUpdate.setStartDate(project.getStartDate());
+            projectRepository.save(projectToUpdate);
+        }
     }
 }

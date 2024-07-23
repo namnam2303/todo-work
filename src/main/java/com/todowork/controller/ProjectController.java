@@ -25,7 +25,7 @@ public class ProjectController {
     public ResponseEntity<?> createProject(@Valid @RequestBody Project project, BindingResult bindingResult) {
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationError(bindingResult);
         if (errorMap != null) return errorMap;
-        Project newProject = service.saveOrUpdate(project);
+        Project newProject = service.save(project);
         return new ResponseEntity<Project>(newProject, HttpStatus.CREATED);
     }
 
@@ -50,7 +50,7 @@ public class ProjectController {
     public ResponseEntity<?> updateProject(@PathVariable String projectId, @Valid @RequestBody Project project, BindingResult bindingResult) {
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationError(bindingResult);
         if (errorMap != null) return errorMap;
-        service.saveOrUpdate(project);
+        service.updateProjectByProjectIdentifier(projectId, project);
         return new ResponseEntity<>("Project with ID '" + projectId + "' was updated", HttpStatus.OK);
     }
 }
