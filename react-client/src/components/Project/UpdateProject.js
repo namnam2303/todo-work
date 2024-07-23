@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 
-const UpdateProject = ({ getProject, project, updateProject }) => {
+const UpdateProject = ({ getProject, project, updateProject, errors }) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -16,7 +16,7 @@ const UpdateProject = ({ getProject, project, updateProject }) => {
     startDate: "",
     endDate: "",
   });
-  const [errors, setErrors] = useState("");
+  const [localErrors, setErrors] = useState({});
 
   useEffect(() => {
     getProject(id, navigate);

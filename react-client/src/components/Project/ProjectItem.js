@@ -1,8 +1,13 @@
-import { hover } from "@testing-library/user-event/dist/hover";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { deleteProject } from "../../actions/projectAction";
 
-export default class ProjectItem extends Component {
+class ProjectItem extends Component {
+  onDeleteClick = (id) => {
+    this.props.deleteProject(id);
+  };
   render() {
     const { project } = this.props;
     return (
@@ -40,19 +45,14 @@ export default class ProjectItem extends Component {
                     </i>
                   </li>
                   <a href="">
-                    <li className="list-group-item delete">
-                      <i className="fa fa-minus-circle pr-1">
-                        {" "}
-                        <React.Fragment>
-                          <Link
-                            to={`http:localhost:8080//${project.projectIdentifier}`}
-                            className="btn"
-                            style={({ color: "red" }, { border: "none" })}
-                          >
-                            Detelte
-                          </Link>
-                        </React.Fragment>
-                      </i>
+                    <li
+                      className="list-group-item delete"
+                      onClick={this.onDeleteClick.bind(
+                        this,
+                        project.projectIdentifier
+                      )}
+                    >
+                      <i className="fa fa-minus-circle pr-1">Delete</i>
                     </li>
                   </a>
                 </ul>
@@ -67,3 +67,8 @@ export default class ProjectItem extends Component {
     );
   }
 }
+ProjectItem.propTypes = {
+  deleteProject: PropTypes.func.isRequired,
+};
+
+export default connect(null, { deleteProject })(ProjectItem);

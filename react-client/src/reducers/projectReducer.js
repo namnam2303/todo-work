@@ -30,7 +30,7 @@ export default function (state = initialState, action) {
     case UPDATE_PROJECT:
       return {
         ...state,
-        projects: [...state.projects, action.payload],
+        //project: action.payload,
       };
     case DELETE_PROJECT:
       return {
