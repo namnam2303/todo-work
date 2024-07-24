@@ -33,7 +33,7 @@ public class ProjectTask {
     @JoinColumn(name="backlog_id", updatable = false, nullable = false)
     @JsonIgnore
     private Backlog backlog;
-
+    @Column(updatable = false)
     private String projectIdentifier;
 
 

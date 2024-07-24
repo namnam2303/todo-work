@@ -1,6 +1,7 @@
 package com.todowork.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,6 +32,7 @@ public class Project {
     private String description;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "project")
+    @JsonIgnore
     private Backlog backlog;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
