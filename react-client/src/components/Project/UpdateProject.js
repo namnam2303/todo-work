@@ -24,7 +24,7 @@ const UpdateProject = ({ getProject, project, updateProject, errors }) => {
 
   // Cập nhật projectData khi project thay đổi
   useEffect(() => {
-    if (project) {
+    if (project && !Object.keys(errors).length) {
       setProjectData({
         projectName: project.projectName || "",
         projectIdentifier: project.projectIdentifier || "",
@@ -50,6 +50,7 @@ const UpdateProject = ({ getProject, project, updateProject, errors }) => {
   const handleSubmit = (e) => {
     // Gửi dữ liệu projectData đến server
     e.preventDefault();
+    project = projectData;
     updateProject(projectData);
   };
 
@@ -70,7 +71,7 @@ const UpdateProject = ({ getProject, project, updateProject, errors }) => {
                   value={projectData.projectName}
                   onChange={handleChange}
                 />
-                <p>{errors.projectName}</p>
+                <p>{localErrors.projectName}</p>
               </div>
               <div className="form-group">
                 <input
@@ -90,7 +91,7 @@ const UpdateProject = ({ getProject, project, updateProject, errors }) => {
                   value={projectData.description}
                   onChange={handleChange}
                 />
-                <p>{errors.description}</p>
+                <p>{localErrors.description}</p>
               </div>
               <h6>Start Date</h6>
               <div className="form-group">
@@ -101,7 +102,7 @@ const UpdateProject = ({ getProject, project, updateProject, errors }) => {
                   value={projectData.startDate}
                   onChange={handleChange}
                 />
-                <p>{errors.startDate}</p>
+                <p>{localErrors.startDate}</p>
               </div>
               <h6>Estimated End Date</h6>
               <div className="form-group">
@@ -112,7 +113,7 @@ const UpdateProject = ({ getProject, project, updateProject, errors }) => {
                   value={projectData.endDate}
                   onChange={handleChange}
                 />
-                <p>{errors.endDate}</p>
+                <p>{localErrors.endDate}</p>
               </div>
 
               <input

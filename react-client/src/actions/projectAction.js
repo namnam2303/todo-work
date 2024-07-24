@@ -10,7 +10,7 @@ import {
 // Action creator for creating a project
 export const createProject = (project, history) => async (dispatch) => {
   try {
-    const res = await axios.post("http://localhost:8080/api/project", project);
+    const res = await axios.post("/api/project", project);
     dispatch({
       type: CREATE_PROJECT,
       payload: res.data, // Ensure res.data exists
@@ -30,7 +30,7 @@ export const createProject = (project, history) => async (dispatch) => {
 export const updateProject = (project) => async (dispatch) => {
   try {
     const res = await axios.put(
-      `http://localhost:8080/api/project/${project.projectIdentifier}`,
+      `/api/project/${project.projectIdentifier}`,
       project
     );
     dispatch({
@@ -51,7 +51,7 @@ export const updateProject = (project) => async (dispatch) => {
   }
 };
 export const getProjects = () => async (dispatch) => {
-  const res = await axios.get("http://localhost:8080/api/project/all");
+  const res = await axios.get("/api/project/all");
   dispatch({
     type: GET_PROJECTS,
     payload: res.data,
@@ -59,7 +59,7 @@ export const getProjects = () => async (dispatch) => {
 };
 export const getProject = (id, history) => async (dispatch) => {
   try {
-    const res = await axios.get(`http://localhost:8080/api/project/${id}`);
+    const res = await axios.get(`/api/project/${id}`);
     dispatch({
       type: GET_PROJECT,
       payload: res.data,
@@ -70,9 +70,15 @@ export const getProject = (id, history) => async (dispatch) => {
 };
 
 export const deleteProject = (id) => async (dispatch) => {
-  await axios.delete(`http://localhost:8080/api/project/${id}`);
-  dispatch({
-    type: DELETE_PROJECT,
-    payload: id,
-  });
+  if (
+    window.confirm(
+      "Do you want to delete this project and all the data releated to it?"
+    )
+  ) {
+    await axios.delete(`/api/project/${id}`);
+    dispatch({
+      type: DELETE_PROJECT,
+      payload: id,
+    });
+  }
 };

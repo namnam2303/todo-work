@@ -24,11 +24,14 @@ public class Project {
     private Long id;
     @NotBlank(message = "Project name is required")
     private String projectName;
-    @Size(min = 4, max = 5, message = "Please use 4 to 5 characters")
+    @Size(min = 4, max = 7, message = "Please use 4 to 7 characters")
     @Column(unique = true, updatable = false)
     private String projectIdentifier;
     @NotBlank(message = "Project description is required")
     private String description;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "project")
+    private Backlog backlog;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Start date is required")

@@ -1,10 +1,10 @@
 package com.todowork.services;
 
+import com.todowork.domain.Backlog;
 import com.todowork.domain.Project;
 import com.todowork.exceptions.ProjectIdException;
+import com.todowork.repository.BacklogRepository;
 import com.todowork.repository.ProjectRepository;
-import jakarta.validation.constraints.NotNull;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +12,31 @@ import org.springframework.stereotype.Service;
 public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
+    @Autowired
+    private BacklogRepository backlogRepository;
 
     public Project save(Project project) {
+        String projectIdentifier = project.getProjectIdentifier().toUpperCase();
         try {
-            project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            project.setProjectIdentifier(projectIdentifier);
+            handleBacklogForProject(project);
             return projectRepository.save(project);
-        } catch (Exception e){
-            throw new ProjectIdException("Project ID" + project.getProjectIdentifier().toUpperCase() + " already exists");
+        } catch (Exception e) {
+            throw new ProjectIdException("Project ID '" + projectIdentifier + "' already exists");
         }
     }
 
+    private void handleBacklogForProject(Project project) {
+        String projectIdentifier = project.getProjectIdentifier().toUpperCase();
+        if (project.getId() == null) {      // a new project
+            Backlog backlog = new Backlog();
+            backlog.setProject(project);
+            backlog.setProjectIdentifier(projectIdentifier);
+            project.setBacklog(backlog);
+        } else {            // an old project to update
+            project.setBacklog(backlogRepository.findByProjectIdentifier(projectIdentifier));
+        }
+    }
     public Project findProjectByProjectIdentifier(String projectIdentifier) {
         Project project = projectRepository.findByProjectIdentifier(projectIdentifier.toUpperCase());
         if (project == null) {
