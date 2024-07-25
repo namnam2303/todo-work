@@ -3,12 +3,12 @@ package com.todowork.services;
 import com.todowork.domain.Backlog;
 import com.todowork.domain.ProjectTask;
 import com.todowork.exceptions.ProjectNotFoundException;
+import com.todowork.exceptions.ProjectTaskNotFoundException;
 import com.todowork.repository.BacklogRepository;
 import com.todowork.repository.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,9 +18,14 @@ public class ProjectTaskService {
     @Autowired
     private ProjectTaskRepository projectTaskRepository;
 
-    public List<ProjectTask> getProjectTasks() {
-        return new ArrayList<>();
+    public Backlog getBacklogByProjectIdentifier(String projectIdentifier) throws ProjectNotFoundException {
+        Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
+        if (backlog == null) {
+            throw new ProjectNotFoundException("Project ID '" + projectIdentifier + "' not found");
+        }
+        return backlog;
     }
+
 
     public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask) {
         //Exception : project not found
@@ -45,13 +50,25 @@ public class ProjectTaskService {
 
     public List<ProjectTask> findProjectTaskByProjectIdentifier(String projectIdentifier) {
         Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
-        if (backlog != null) {
+        if (backlog == null) {
             throw new ProjectNotFoundException("Project " + "has ID '" + projectIdentifier + "' not found");
         }
 
-        List<ProjectTask> projectTasks =
-                projectTaskRepository.findByProjectIdentifierOrderByPriority(projectIdentifier);
-        return projectTasks;
+        return projectTaskRepository.findByProjectIdentifierOrderByPriority(projectIdentifier);
+    }
+
+    public ProjectTask findTaskByProjectSequence(String projectSequence) {
+        return projectTaskRepository.findProjectTaskByProjectSequence(projectSequence);
+    }
+
+    public ProjectTask updateProjectTaskByTaskSequence(String taskSequence, ProjectTask updatedProjectTask) {
+        ProjectTask projectTask = findTaskByProjectSequence(taskSequence);
+        if (projectTask == null) {
+            throw new ProjectNotFoundException("Project " + "has ID '" + taskSequence + "' not found");
+        }
+        updatedProjectTask.setId(projectTask.getId());
+        projectTaskRepository.save(updatedProjectTask);
+        return updatedProjectTask;
     }
 
     private void initializeProjectTaskProps(Backlog backlog, ProjectTask projectTask) {
@@ -68,5 +85,14 @@ public class ProjectTaskService {
             projectTask.setStatus("TODO");
         }
 
+    }
+
+    public List<ProjectTask> deleteTaskByTaskSequence(String taskSequence) {
+        ProjectTask projectTask = findTaskByProjectSequence(taskSequence);
+        if (projectTask == null) {
+            throw new ProjectTaskNotFoundException("Project task" + "has ID '" + taskSequence + "' not found");
+        }
+        projectTaskRepository.delete(projectTask);
+        return projectTaskRepository.findByProjectIdentifierOrderByPriority(projectTask.getProjectIdentifier());
     }
 }
