@@ -1,4 +1,10 @@
-import { GET_TASKS, GET_BACKLOG, DELETE_TASK, GET_TASK } from "../actions/type";
+import {
+  GET_TASKS,
+  GET_BACKLOG,
+  DELETE_TASK,
+  GET_TASK,
+  UPDATE_TASK,
+} from "../actions/type";
 
 const initialState = {
   project_tasks: [],
@@ -18,6 +24,11 @@ export default function (state = initialState, action) {
         project_tasks: action.payload,
       };
     case GET_TASK:
+      return {
+        ...state,
+        project_task: action.payload,
+      };
+    case UPDATE_TASK:
       return {
         ...state,
         project_task: action.payload,

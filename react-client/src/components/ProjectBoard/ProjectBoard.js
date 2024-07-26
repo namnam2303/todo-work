@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
-import { getProjectTask } from "../../actions/projectTaskAction";
+import { getListProjectTask } from "../../actions/projectTaskAction";
 import { useState } from "react";
 import Backlog from "../ProjectBoard/Backlog";
 import { Link } from "react-router-dom";
 
-const ProjectBoard = ({ project_tasks, getProjectTask, errors }) => {
+const ProjectBoard = ({ project_tasks, getListProjectTask, errors }) => {
   const { id } = useParams();
   const [localErrors, setLocalErrors] = useState({});
   useEffect(() => {
@@ -16,8 +16,8 @@ const ProjectBoard = ({ project_tasks, getProjectTask, errors }) => {
   }, [errors]);
 
   useEffect(() => {
-    getProjectTask(id);
-  }, [id, getProjectTask]);
+    getListProjectTask(id);
+  }, [id, getListProjectTask]);
 
   const loadTaskBoard = (localErrors, project_tasks) => {
     if (project_tasks.length < 1) {
@@ -62,7 +62,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  getProjectTask,
+  getListProjectTask,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectBoard);

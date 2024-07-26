@@ -7,7 +7,7 @@ export default class Header extends Component {
         <nav className="navbar navbar-expand-sm navbar-dark bg-primary mb-4">
           <div className="container">
             <a className="navbar-brand" href="Dashboard.html">
-              Personal Project Management Tool
+              Công cụ quản lý dự án cá nhân
             </a>
             <button
               className="navbar-toggler"
@@ -30,12 +30,12 @@ export default class Header extends Component {
               <ul className="navbar-nav ml-auto d-flex justify-content-end w-100">
                 <li className="nav-item">
                   <a className="nav-link" href="register.html">
-                    Sign Up
+                    Đăng ký
                   </a>
                 </li>
                 <li className="nav-item">
                   <a className="nav-link" href="login.html">
-                    Login
+                    Đăng nhập
                   </a>
                 </li>
               </ul>

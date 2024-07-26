@@ -46,9 +46,7 @@ class ProjectItem extends Component {
                 <ul className="list-group">
                   <Link to={`/projectBoard/${project.projectIdentifier}`}>
                     <li className="list-group-item board">
-                      <i className="fa fa-flag-checkered pr-1">
-                        Project Board{" "}
-                      </i>
+                      <i className="fa fa-flag-checkered pr-1"> Chi tiết</i>
                     </li>
                   </Link>
 
@@ -57,10 +55,9 @@ class ProjectItem extends Component {
                       <React.Fragment>
                         <Link
                           to={`/updateProject/${project.projectIdentifier}`}
-                          className="btn"
-                          style={({ color: "#18a2b9" }, { border: "none" })}
+                          className="no-underline"
                         >
-                          Update
+                          <i class="bi bi-box-arrow-in-down fa"> Cập nhật</i>
                         </Link>
                       </React.Fragment>
                     </i>
@@ -71,7 +68,7 @@ class ProjectItem extends Component {
                       this.onDeleteClick(project.projectIdentifier)
                     }
                   >
-                    <i className="fa fa-minus-circle pr-1">Delete</i>
+                    <i className="fa fa-minus-circle pr-1"> Xóa</i>
                   </li>
                 </ul>
               </div>

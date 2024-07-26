@@ -76,9 +76,6 @@ public class BacklogController {
         ResponseEntity<?> errorsMap = mapValidationErrorService.mapValidationError(bindingResult);
         if (errorsMap != null) return errorsMap;
 
-        if (!task_sequence.equals(projectTask.getProjectSequence())) {
-            throw new ProjectTaskNotFoundException(task_sequence + " task  is different with " + projectTask.getProjectSequence() + " task");
-        }
 
         ProjectTask taskToUpdate = projectTaskService.findTaskByProjectSequence(task_sequence);
         if (taskToUpdate == null) {

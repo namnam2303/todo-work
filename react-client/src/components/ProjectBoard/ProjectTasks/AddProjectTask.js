@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { createProjectTask } from "../../../actions/projectTaskAction";
 
-const AddProjectTask = ({ createProjectTask, errors }) => {
+const AddProjectTask = ({ errors, createProjectTask }) => {
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const [task, setTask] = useState({
     summary: "",
     acceptanceCriteria: "",
@@ -27,18 +27,17 @@ const AddProjectTask = ({ createProjectTask, errors }) => {
     setTask({ ...task, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-
     const newTask = {
       summary: task.summary,
       acceptanceCriteria: task.acceptanceCriteria,
       status: task.status,
       priority: task.priority,
       dueDate: task.dueDate,
+      projectIdentifier: task.projectIdentifier,
     };
-
-    createProjectTask(task.projectIdentifier, newTask);
+    await createProjectTask(newTask, navigate);
   };
 
   return (
@@ -47,19 +46,21 @@ const AddProjectTask = ({ createProjectTask, errors }) => {
         <div className="row">
           <div className="col-md-8 m-auto">
             <Link
-              to={`/projectBoard/${id}`}
-              className="btn btn-lg  text-white"
+              to={`/projectBoard/${task.projectIdentifier}`}
+              className="btn btn-lg text-white"
               id="btn-create"
             >
               Back to Project Board
             </Link>
-            <h4 className="display-4 text-center">Thêm đầu việc</h4>
-            {/* <p className="lead text-center">Project Name + Project Code</p> */}
+            <h4 className="display-4 text-center">Create Project Task</h4>
+            <p className="lead text-center">Project Name + Project Code</p>
             <form onSubmit={onSubmit}>
               <div className="form-group">
                 <input
                   type="text"
-                  className="form-control form-control-lg"
+                  className={`form-control form-control-lg ${
+                    task.errors.summary ? "is-invalid" : ""
+                  }`}
                   name="summary"
                   placeholder="Project Task summary"
                   value={task.summary}
@@ -95,7 +96,9 @@ const AddProjectTask = ({ createProjectTask, errors }) => {
                   value={task.priority}
                   onChange={onChange}
                 >
-                  <option value={0}>Select Priority</option>
+                  <option value={0} disabled>
+                    Select Priority
+                  </option>
                   <option value={1}>High</option>
                   <option value={2}>Medium</option>
                   <option value={3}>Low</option>
@@ -109,14 +112,20 @@ const AddProjectTask = ({ createProjectTask, errors }) => {
                   value={task.status}
                   onChange={onChange}
                 >
-                  <option value="">Select Status</option>
-                  <option value="TO_DO">TO DO</option>
-                  <option value="IN_PROGRESS">IN PROGRESS</option>
+                  <option value="" disabled>
+                    Select Status
+                  </option>
+                  <option value="TODO">TO DO</option>
+                  <option value="INPROGRESS">IN PROGRESS</option>
                   <option value="DONE">DONE</option>
                 </select>
               </div>
 
-              <input type="submit" className="btn btn-primary btn-block mt-4" />
+              <input
+                type="submit"
+                className="btn btn-primary btn-block mt-4"
+                value={"Create"}
+              />
             </form>
           </div>
         </div>
@@ -133,5 +142,4 @@ AddProjectTask.propTypes = {
 const mapStateToProps = (state) => ({
   errors: state.errors,
 });
-
 export default connect(mapStateToProps, { createProjectTask })(AddProjectTask);

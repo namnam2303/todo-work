@@ -1,21 +1,47 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { createProjectTask } from "../../../actions/projectTaskAction";
+import {
+  getProjectTask,
+  updateProjectTask,
+} from "../../../actions/projectTaskAction";
 
-const AddProjectTask = ({ createProjectTask, errors }) => {
-  const { id } = useParams();
-
+const UpdateProjectTask = ({
+  errors,
+  project_task,
+  getProjectTask,
+  updateProjectTask,
+}) => {
+  const { id, sequence } = useParams();
+  const navigate = useNavigate();
   const [task, setTask] = useState({
     summary: "",
     acceptanceCriteria: "",
     status: "",
     priority: 0,
     dueDate: "",
-    projectIdentifier: id,
+    projectIdentifier: "",
     errors: {},
   });
+
+  useEffect(() => {
+    getProjectTask(id, sequence);
+  }, [id, sequence, getProjectTask]);
+
+  useEffect(() => {
+    if (project_task) {
+      setTask((prevTask) => ({
+        ...prevTask,
+        summary: project_task.summary || "",
+        acceptanceCriteria: project_task.acceptanceCriteria || "",
+        status: project_task.status || "",
+        priority: project_task.priority || 0,
+        dueDate: project_task.dueDate ? project_task.dueDate.split("T")[0] : "",
+        projectIdentifier: project_task.projectIdentifier || "",
+      }));
+    }
+  }, [project_task]);
 
   useEffect(() => {
     if (errors) {
@@ -27,18 +53,20 @@ const AddProjectTask = ({ createProjectTask, errors }) => {
     setTask({ ...task, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-
     const newTask = {
       summary: task.summary,
       acceptanceCriteria: task.acceptanceCriteria,
       status: task.status,
       priority: task.priority,
       dueDate: task.dueDate,
+      projectIdentifier: task.projectIdentifier,
     };
-
-    createProjectTask(task.projectIdentifier, newTask);
+    const errorResponse = await updateProjectTask(sequence, newTask);
+    if (Object.keys(errorResponse ?? {}).length === 0) {
+      navigate(`/projectBoard/${task.projectIdentifier}`);
+    }
   };
 
   return (
@@ -47,19 +75,21 @@ const AddProjectTask = ({ createProjectTask, errors }) => {
         <div className="row">
           <div className="col-md-8 m-auto">
             <Link
-              to={`/projectBoard/${id}`}
-              className="btn btn-lg  text-white"
+              to={`/projectBoard/${task.projectIdentifier}`}
+              className="btn btn-lg text-white"
               id="btn-create"
             >
               Back to Project Board
             </Link>
-            <h4 className="display-4 text-center">Chi tiết công việc</h4>
+            <h4 className="display-4 text-center">Task detail</h4>
             <p className="lead text-center">Project Name + Project Code</p>
             <form onSubmit={onSubmit}>
               <div className="form-group">
                 <input
                   type="text"
-                  className="form-control form-control-lg"
+                  className={`form-control form-control-lg ${
+                    task.errors.summary ? "is-invalid" : ""
+                  }`}
                   name="summary"
                   placeholder="Project Task summary"
                   value={task.summary}
@@ -95,7 +125,9 @@ const AddProjectTask = ({ createProjectTask, errors }) => {
                   value={task.priority}
                   onChange={onChange}
                 >
-                  <option value={0}>Select Priority</option>
+                  <option value={0} disabled>
+                    Select Priority
+                  </option>
                   <option value={1}>High</option>
                   <option value={2}>Medium</option>
                   <option value={3}>Low</option>
@@ -109,14 +141,20 @@ const AddProjectTask = ({ createProjectTask, errors }) => {
                   value={task.status}
                   onChange={onChange}
                 >
-                  <option value="">Select Status</option>
-                  <option value="TO_DO">TO DO</option>
-                  <option value="IN_PROGRESS">IN PROGRESS</option>
+                  <option value="" disabled>
+                    Select Status
+                  </option>
+                  <option value="TODO">TO DO</option>
+                  <option value="INPROGRESS">IN PROGRESS</option>
                   <option value="DONE">DONE</option>
                 </select>
               </div>
 
-              <input type="submit" className="btn btn-primary btn-block mt-4" />
+              <input
+                type="submit"
+                className="btn btn-primary btn-block mt-4"
+                value={"Update"}
+              />
             </form>
           </div>
         </div>
@@ -125,13 +163,18 @@ const AddProjectTask = ({ createProjectTask, errors }) => {
   );
 };
 
-AddProjectTask.propTypes = {
-  createProjectTask: PropTypes.func.isRequired,
+UpdateProjectTask.propTypes = {
+  updateProjectTask: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
+  project_task: PropTypes.object,
+  getProjectTask: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   errors: state.errors,
+  project_task: state.backlog.project_task,
 });
 
-export default connect(mapStateToProps, { createProjectTask })(AddProjectTask);
+export default connect(mapStateToProps, { updateProjectTask, getProjectTask })(
+  UpdateProjectTask
+);

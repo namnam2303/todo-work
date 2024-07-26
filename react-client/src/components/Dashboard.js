@@ -31,7 +31,7 @@ class Dashboard extends Component {
           <div className="container">
             <div className="row">
               <div className="col-md-12">
-                <h1 className="display-4 text-center">Projects</h1>
+                <h1 className="display-4 text-center">Danh sách dự án</h1>
                 <br />
                 <CreateProjectButton />
                 <br />

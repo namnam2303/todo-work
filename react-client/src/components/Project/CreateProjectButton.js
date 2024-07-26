@@ -8,7 +8,7 @@ const CreateProjectButton = () => {
         className="btn btn-lg btn-info text-white"
         id="btn-create"
       >
-        Create a Project
+        Tạo dự án
       </Link>
     </React.Fragment>
   );
