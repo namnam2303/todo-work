@@ -5,7 +5,6 @@ const CreateProjectButton = () => {
     <React.Fragment>
       <Link
         to="/addProject"
-        href="ProjectForm.html"
         className="btn btn-lg btn-info text-white"
         id="btn-create"
       >
