@@ -34,4 +34,10 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         UserNotFoundExceptionResponse exceptionResponse = new UserNotFoundExceptionResponse(exception.getMessage());
         return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = {Exception.class})
+    public final ResponseEntity<Object> handleInvalidLoginException(Exception exception, WebRequest request) {
+        InvalidLoginResponse invalidLoginResponse = new InvalidLoginResponse();
+        return new ResponseEntity<>(invalidLoginResponse, HttpStatus.UNAUTHORIZED);
+    }
 }

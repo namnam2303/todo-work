@@ -4,8 +4,6 @@ import com.todowork.domain.Backlog;
 import com.todowork.domain.ProjectTask;
 import com.todowork.exceptions.ProjectNotFoundException;
 import com.todowork.exceptions.ProjectTaskNotFoundException;
-import com.todowork.repository.BacklogRepository;
-import com.todowork.repository.ProjectTaskRepository;
 import com.todowork.services.MapValidationErrorService;
 import com.todowork.services.ProjectTaskService;
 import jakarta.validation.Valid;
