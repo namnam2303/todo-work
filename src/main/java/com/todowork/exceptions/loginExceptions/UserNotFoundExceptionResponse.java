@@ -1,15 +1,14 @@
-package com.todowork.exceptions.LoginExceptions;
-
+package com.todowork.exceptions.loginExceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-public class InvalidLoginExceptionResponse {
-    private String message;
+public class UserNotFoundExceptionResponse {
+    private String userNotFound;
 }

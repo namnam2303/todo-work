@@ -2,7 +2,7 @@ package com.todowork.services;
 
 import com.todowork.domain.Backlog;
 import com.todowork.domain.Project;
-import com.todowork.exceptions.ProjectIdException;
+import com.todowork.exceptions.projectExceptions.ProjectIdException;
 import com.todowork.repository.BacklogRepository;
 import com.todowork.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;

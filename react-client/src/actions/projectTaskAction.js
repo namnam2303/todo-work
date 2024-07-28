@@ -7,9 +7,12 @@ import {
   CREATE_TASK,
   GET_TASK,
   CLEAR_ERRORS,
-} from "./type";
+} from "./types";
+import { clearErrors } from "./authAction";
+
 export const createProjectTask = (task, navigate) => async (dispatch) => {
   try {
+    await dispatch(clearErrors());
     const res = await axios.post(
       `/api/backlog/${task.projectIdentifier}`,
       task
@@ -18,14 +21,14 @@ export const createProjectTask = (task, navigate) => async (dispatch) => {
       type: CREATE_TASK,
       payload: res.data,
     });
-    dispatch({
-      type: CLEAR_ERRORS, // Clear errors after successful creation
-    });
     navigate(`/projectBoard/${task.projectIdentifier}`);
   } catch (error) {
+    const errorData = error.response
+      ? error.response.data
+      : { message: "An error occurred" };
     dispatch({
       type: GET_ERRORS,
-      payload: error.response.data,
+      payload: errorData,
     });
   }
 };
@@ -33,13 +36,11 @@ export const createProjectTask = (task, navigate) => async (dispatch) => {
 export const updateProjectTask =
   (sequence, projectTask) => async (dispatch) => {
     try {
+      await dispatch(clearErrors());
       const res = await axios.put(`/api/backlog/${sequence}`, projectTask);
       dispatch({
         type: UPDATE_TASK,
         payload: res.data,
-      });
-      dispatch({
-        type: CLEAR_ERRORS, // Clear errors after successful update
       });
       return {}; // Return an empty object to indicate success
     } catch (err) {
@@ -65,6 +66,7 @@ export const getProjectTask = (id, sequence) => async (dispatch) => {
     });
   }
 };
+
 export const getListProjectTask = (id) => async (dispatch) => {
   const res = await axios.get(`/api/backlog/${id}`);
   dispatch({
@@ -72,6 +74,7 @@ export const getListProjectTask = (id) => async (dispatch) => {
     payload: res.data,
   });
 };
+
 export const deleteProjectTask = (id) => async (dispatch) => {
   try {
     await axios.delete(`/api/backlog/${id}`);

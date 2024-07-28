@@ -51,7 +51,7 @@ const UpdateProject = ({ getProject, project, updateProject, errors }) => {
     // Gửi dữ liệu projectData đến server
     e.preventDefault();
     project = projectData;
-    updateProject(projectData);
+    updateProject(projectData, navigate);
   };
 
   return (

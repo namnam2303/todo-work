@@ -1,8 +1,14 @@
 package com.todowork.exceptions;
 
-import com.todowork.exceptions.LoginExceptions.InvalidLoginExceptionResponse;
-import com.todowork.exceptions.LoginExceptions.UserNotFoundException;
-import com.todowork.exceptions.LoginExceptions.UserNotFoundExceptionResponse;
+import com.todowork.exceptions.loginExceptions.InvalidLoginExceptionResponse;
+import com.todowork.exceptions.loginExceptions.UserNotFoundException;
+import com.todowork.exceptions.loginExceptions.UserNotFoundExceptionResponse;
+import com.todowork.exceptions.projectExceptions.ProjectIdException;
+import com.todowork.exceptions.projectExceptions.ProjectIdExceptionResponse;
+import com.todowork.exceptions.projectExceptions.ProjectNotFoundException;
+import com.todowork.exceptions.projectExceptions.ProjectNotFoundExceptionResponse;
+import com.todowork.exceptions.projectTaskException.ProjectTaskNotFoundException;
+import com.todowork.exceptions.projectTaskException.ProjectTaskNotFoundExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

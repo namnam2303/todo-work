@@ -2,8 +2,8 @@ package com.todowork.services;
 
 import com.todowork.domain.Backlog;
 import com.todowork.domain.ProjectTask;
-import com.todowork.exceptions.ProjectNotFoundException;
-import com.todowork.exceptions.ProjectTaskNotFoundException;
+import com.todowork.exceptions.projectExceptions.ProjectNotFoundException;
+import com.todowork.exceptions.projectTaskException.ProjectTaskNotFoundException;
 import com.todowork.repository.BacklogRepository;
 import com.todowork.repository.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;

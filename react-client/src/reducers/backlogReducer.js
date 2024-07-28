@@ -4,7 +4,7 @@ import {
   DELETE_TASK,
   GET_TASK,
   UPDATE_TASK,
-} from "../actions/type";
+} from "../actions/types";
 
 const initialState = {
   project_tasks: [],

@@ -1,7 +1,7 @@
 package com.todowork.controller;
 
 import com.todowork.domain.User;
-import com.todowork.model.JwtResponse;
+import com.todowork.security.JwtResponse;
 import com.todowork.security.JwtTokenProvider;
 import com.todowork.services.CustomUserDetailsService;
 import com.todowork.services.MapValidationErrorService;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
-    private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService userDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
@@ -26,9 +25,8 @@ public class UserController {
     private final MapValidationErrorService mapValidationErrorService;
 
     @Autowired
-    public UserController(AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService,
+    public UserController(CustomUserDetailsService userDetailsService,
                           JwtTokenProvider jwtTokenProvider, UserService userService, PasswordEncoder passwordEncoder, MapValidationErrorService mapValidationErrorService) {
-        this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
@@ -51,8 +49,9 @@ public class UserController {
         String jwt = jwtTokenProvider.generateToken(userDetails.getUsername());
 
         System.out.println("Login successful, generated JWT: " + jwt);
+        JwtResponse jwtResponse = new JwtResponse(jwt, user.getUsername());
+        return ResponseEntity.ok(jwtResponse);
 
-        return ResponseEntity.ok(new JwtResponse(jwt));
     }
 
     @PostMapping("/register")

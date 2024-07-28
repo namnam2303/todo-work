@@ -1,4 +1,4 @@
-package com.todowork.exceptions.LoginExceptions;
+package com.todowork.exceptions.loginExceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

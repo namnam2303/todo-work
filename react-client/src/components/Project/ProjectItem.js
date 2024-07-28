@@ -52,14 +52,12 @@ class ProjectItem extends Component {
 
                   <li className="list-group-item update">
                     <i className="fa fa-edit pr-1">
-                      <React.Fragment>
-                        <Link
-                          to={`/updateProject/${project.projectIdentifier}`}
-                          className="no-underline"
-                        >
-                          <i class="bi bi-box-arrow-in-down fa"> Cập nhật</i>
-                        </Link>
-                      </React.Fragment>
+                      <Link
+                        to={`/updateProject/${project.projectIdentifier}`}
+                        className="no-underline"
+                      >
+                        <i class="bi bi-box-arrow-in-down fa"> Cập nhật</i>
+                      </Link>
                     </i>
                   </li>
                   <li

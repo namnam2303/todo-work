@@ -14,3 +14,5 @@ export const DELETE_TASK = "DELETE_TASK";
 export const UPDATE_TASK = "UPDATE_TASK";
 
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
+
+export const SET_CURRENT_USER = "SET_CURRENT_USER";

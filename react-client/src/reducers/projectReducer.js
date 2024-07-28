@@ -4,7 +4,7 @@ import {
   CREATE_PROJECT,
   DELETE_PROJECT,
   UPDATE_PROJECT,
-} from "../actions/type";
+} from "../actions/types";
 const initialState = {
   projects: [],
   project: {},
