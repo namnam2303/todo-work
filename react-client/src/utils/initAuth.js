@@ -1,4 +1,3 @@
-import axios from "axios";
 import { jwtDecode as jwt_decode } from "jwt-decode";
 import store from "../store";
 import { setCurrentUser, logoutUser } from "../actions/authAction";

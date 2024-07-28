@@ -3,13 +3,17 @@ import { Navigate } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-const PrivateRoute = ({ children, auth }) => {
-  return auth.isAuthenticated ? children : <Navigate to="/login" />;
+const PrivateRoute = ({ component: Component, auth, ...rest }) => {
+  if (auth.isAuthenticated) {
+    return <Component {...rest} />;
+  } else {
+    return <Navigate to="/login" />;
+  }
 };
 
 PrivateRoute.propTypes = {
   auth: PropTypes.object.isRequired,
-  children: PropTypes.node.isRequired,
+  component: PropTypes.elementType.isRequired,
 };
 
 const mapStateToProps = (state) => ({

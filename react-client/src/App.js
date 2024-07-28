@@ -13,12 +13,8 @@ import AddProjectTask from "./components/ProjectBoard/ProjectTasks/AddProjectTas
 import UpdateProjectTask from "./components/ProjectBoard/ProjectTasks/UpdateProjectTask";
 import LoginForm from "./components/Login/loginForm";
 import RegisterForm from "./components/Login/registerForm";
-import setAuthToken from "./utils/setAuthToken";
-import { jwtDecode as jwt_decode } from "jwt-decode";
-import { setCurrentUser, logoutUser } from "./actions/authAction";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import initAuth from "./utils/initAuth";
+import PrivateRoute from "./utils/privateRoute";
 
 const App = () => {
   useEffect(() => {
@@ -31,14 +27,29 @@ const App = () => {
         <div className="App">
           <Header />
           <Routes>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/addProject" element={<AddProject />} />
-            <Route path="/updateProject/:id" element={<UpdateProject />} />
-            <Route path="/projectBoard/:id" Component={ProjectBoard} />
-            <Route path="/addProjectTask/:id" Component={AddProjectTask} />
+            <Route
+              path="/dashboard"
+              element={<PrivateRoute component={Dashboard} />}
+            />
+            <Route
+              path="/addProject"
+              element={<PrivateRoute component={AddProject} />}
+            />
+            <Route
+              path="/updateProject/:id"
+              element={<PrivateRoute component={UpdateProject} />}
+            />
+            <Route
+              path="/projectBoard/:id"
+              element={<PrivateRoute component={ProjectBoard} />}
+            />
+            <Route
+              path="/addProjectTask/:id"
+              element={<PrivateRoute component={AddProject} />}
+            />
             <Route
               path="/updateProjectTask/:id/:sequence"
-              Component={UpdateProjectTask}
+              element={<PrivateRoute component={UpdateProjectTask} />}
             />
             <Route path="/login" element={<LoginForm />} /> {/* Route Login */}
             <Route path="/register" element={<RegisterForm />} />{" "}
