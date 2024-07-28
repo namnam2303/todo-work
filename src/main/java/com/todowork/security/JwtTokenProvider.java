@@ -38,7 +38,7 @@ public class JwtTokenProvider {
                     .setSigningKey(secret) // Đặt secret key để xác minh chữ ký của JWT
                     .parseClaimsJws(token); // Phân tích JWT và xác minh tính hợp lệ của nó
             return true; // JWT hợp lệ
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch ( Exception e) {
             return false; // Nếu có ngoại lệ, JWT không hợp lệ
         }
     }

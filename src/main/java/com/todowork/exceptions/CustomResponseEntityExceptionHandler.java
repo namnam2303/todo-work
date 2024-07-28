@@ -1,5 +1,8 @@
 package com.todowork.exceptions;
 
+import com.todowork.exceptions.LoginExceptions.InvalidLoginExceptionResponse;
+import com.todowork.exceptions.LoginExceptions.UserNotFoundException;
+import com.todowork.exceptions.LoginExceptions.UserNotFoundExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -37,7 +40,7 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 
     @ExceptionHandler(value = {Exception.class})
     public final ResponseEntity<Object> handleInvalidLoginException(Exception exception, WebRequest request) {
-        InvalidLoginResponse invalidLoginResponse = new InvalidLoginResponse();
+        InvalidLoginExceptionResponse invalidLoginResponse = new InvalidLoginExceptionResponse("Username or password is incorrect");
         return new ResponseEntity<>(invalidLoginResponse, HttpStatus.UNAUTHORIZED);
     }
 }

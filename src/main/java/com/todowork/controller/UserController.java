@@ -1,44 +1,65 @@
 package com.todowork.controller;
 
-import com.todowork.model.JwtRequest;
+import com.todowork.domain.User;
 import com.todowork.model.JwtResponse;
 import com.todowork.security.JwtTokenProvider;
 import com.todowork.services.CustomUserDetailsService;
+import com.todowork.services.MapValidationErrorService;
+import com.todowork.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final CustomUserDetailsService userDetailsService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+    private final MapValidationErrorService mapValidationErrorService;
 
     @Autowired
-    private CustomUserDetailsService userDetailsService;
-
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    public UserController(AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService,
+                          JwtTokenProvider jwtTokenProvider, UserService userService, PasswordEncoder passwordEncoder, MapValidationErrorService mapValidationErrorService) {
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.userService = userService;
+        this.mapValidationErrorService = mapValidationErrorService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostMapping("/login")
-    public JwtResponse createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUserName(), authenticationRequest.getPassword())
-            );
-        } catch (AuthenticationException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
+    public ResponseEntity<?> createAuthenticationToken(@Valid  @RequestBody User user, BindingResult result) throws Exception {
+        ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationError(result);
+        if (errorMap != null) return errorMap;
+        System.out.println("Received login request: " + user);
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+        if (!passwordEncoder.matches(user.getPassword(), userDetails.getPassword())) {
+            throw new Exception("INVALID_CREDENTIALS");
         }
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUserName());
-        final String jwt = jwtTokenProvider.generateToken(userDetails.getUsername());
+        // Xác thực thành công, tạo JWT
+        String jwt = jwtTokenProvider.generateToken(userDetails.getUsername());
 
-        return new JwtResponse(jwt);
+        System.out.println("Login successful, generated JWT: " + jwt);
+
+        return ResponseEntity.ok(new JwtResponse(jwt));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result) {
+        ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationError(result);
+        if (errorMap != null) return errorMap;
+        userService.saveUser(user);
+        return ResponseEntity.ok("User registered successfully");
     }
 }

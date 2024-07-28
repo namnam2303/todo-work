@@ -1,4 +1,4 @@
-package com.todowork.exceptions;
+package com.todowork.exceptions.LoginExceptions;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
