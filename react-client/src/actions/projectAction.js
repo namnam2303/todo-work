@@ -8,20 +8,10 @@ import {
   DELETE_PROJECT,
 } from "./types";
 import { clearErrors } from "./authAction";
-import setAuthToken from "../utils/setAuthToken";
-
-const setUpJwt = () => {
-  const token = localStorage.getItem("jwtToken");
-  if (token) {
-    setAuthToken(token);
-    console.log(token);
-  }
-};
 
 export const createProject = (project, navigate) => async (dispatch) => {
   try {
     await dispatch(clearErrors());
-    setUpJwt();
     const res = await axios.post("/api/project", project);
     dispatch({
       type: CREATE_PROJECT,
@@ -42,7 +32,6 @@ export const createProject = (project, navigate) => async (dispatch) => {
 export const updateProject = (project, navigate) => async (dispatch) => {
   try {
     await dispatch(clearErrors());
-    setUpJwt();
     const res = await axios.put(
       `/api/project/${project.projectIdentifier}`,
       project
@@ -64,7 +53,6 @@ export const updateProject = (project, navigate) => async (dispatch) => {
 };
 
 export const getProjects = () => async (dispatch) => {
-  setUpJwt();
   const res = await axios.get("/api/project/all");
   dispatch({
     type: GET_PROJECTS,
@@ -74,7 +62,6 @@ export const getProjects = () => async (dispatch) => {
 
 export const getProject = (id, navigate) => async (dispatch) => {
   try {
-    setUpJwt();
     const res = await axios.get(`/api/project/${id}`);
     dispatch({
       type: GET_PROJECT,
@@ -87,7 +74,6 @@ export const getProject = (id, navigate) => async (dispatch) => {
 
 export const deleteProject = (id) => async (dispatch) => {
   try {
-    setUpJwt();
     await axios.delete(`/api/project/${id}`);
     dispatch({
       type: DELETE_PROJECT,

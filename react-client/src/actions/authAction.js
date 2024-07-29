@@ -45,6 +45,12 @@ export const logoutUser = () => (dispatch) => {
   setAuthToken(false);
   // Xóa user hiện tại khỏi state
   dispatch(setCurrentUser({}));
+
+  // Hủy bỏ tất cả các Interceptor của Axios
+  axios.interceptors.response.handlers = [];
+
+  // Điều hướng đến trang đăng nhập
+  window.location.href = "/login";
 };
 
 // Xóa lỗi

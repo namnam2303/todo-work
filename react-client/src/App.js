@@ -45,7 +45,7 @@ const App = () => {
             />
             <Route
               path="/addProjectTask/:id"
-              element={<PrivateRoute component={AddProject} />}
+              element={<PrivateRoute component={AddProjectTask} />}
             />
             <Route
               path="/updateProjectTask/:id/:sequence"

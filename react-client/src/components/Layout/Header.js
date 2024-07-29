@@ -3,14 +3,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authAction";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 
 const Header = ({ auth, logoutUser }) => {
-  const navigate = useNavigate();
   const onLogoutClick = (e) => {
     e.preventDefault();
     logoutUser();
-    navigate("/login");
   };
 
   const authLinks = (
