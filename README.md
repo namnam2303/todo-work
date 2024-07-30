@@ -29,6 +29,26 @@ TodoWork là một ứng dụng quản lý dự án đơn giản với các ch�
 - Bootstrap
 - React Router
 
+## API Chính
+
+### Project API
+- **Tạo dự án**: `POST /api/project`
+- **Lấy dự án theo ID**: `GET /api/project/{projectId}`
+- **Lấy tất cả dự án**: `GET /api/project/all`
+- **Xóa dự án**: `DELETE /api/project/{projectId}`
+- **Cập nhật dự án**: `PUT /api/project/{projectId}`
+
+### Backlog API
+- **Thêm task vào backlog**: `POST /api/backlog/{projectIdentifier}`
+- **Lấy tất cả tasks trong backlog**: `GET /api/backlog/{projectIdentifier}`
+- **Lấy task theo sequence**: `GET /api/backlog/{projectIdentifier}/{task_sequence}`
+- **Cập nhật task**: `PUT /api/backlog/{task_sequence}`
+- **Xóa task**: `DELETE /api/backlog/{task_sequence}`
+
+### User API
+- **Đăng nhập**: `POST /api/auth/login`
+- **Đăng ký**: `POST /api/auth/register`
+
 ## Yêu cầu hệ thống
 
 - Java 17
